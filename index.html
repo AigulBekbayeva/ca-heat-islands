@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Острова тепла Центральной Азии · #30DayMapChallenge День 9 Urban–rural</title>
-<meta name="description" content="Насколько города Центральной Азии горячее своих окрестностей и как это изменилось с 2003 по 2025 год. Aqua MODIS LST, GHSL.">
+<title>Urban heat islands of Central Asia · #30DayMapChallenge Day 9 Urban–rural</title>
+<meta name="description" content="How much hotter Central Asian cities are than their surroundings, and how that gap changed from 2003 to 2025. Aqua MODIS LST, GHSL.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
@@ -26,13 +26,13 @@
   <div class="map-wrap">
     <div class="map" id="map"></div>
     <div class="legend" id="legend"></div>
-    <button class="zoom-reset" id="reset" type="button">Весь регион</button>
+    <button class="zoom-reset" id="reset" type="button">Reset view</button>
   </div>
   <aside class="panel">
-    <p class="kicker">#30DayMapChallenge · День 9 · Urban–rural</p>
-    <h1>Острова тепла Центральной Азии</h1>
-    <p class="subtitle">Urban heat islands of Central Asia · 2003–2025</p>
-    <p class="lede">Насколько город горячее собственных окрестностей и растёт ли эта разница. Окрестности нагреваются вместе с климатом всего региона, поэтому разница между городом и окрестностями показывает, что добавил сам город: застройка, асфальт, исчезновение зелени.</p>
+    <p class="kicker">#30DayMapChallenge · Day 9 · Urban–rural</p>
+    <h1>Are Central Asian cities heating up faster than their surroundings?</h1>
+    <p class="subtitle">Surface urban heat islands · 30 cities · summers 2003–2025</p>
+    <p class="lede">The whole region is warming, so the countryside heats up too. Subtracting it from the city leaves what the city itself adds: buildings, asphalt, lost greenery. That gap is the surface urban heat island, and this map shows whether it is growing.</p>
 
     <div class="controls">
       <div class="seg" id="seg-time"></div>
@@ -42,17 +42,17 @@
     <div class="equation" id="equation"></div>
     <p class="muted" id="eq-note" style="margin:0 0 4px;font-size:12px"></p>
 
-    <h2 id="db-title">Тогда и сейчас</h2>
+    <h2 id="db-title">Then and now</h2>
     <div class="key" id="db-key"></div>
     <div id="dumbbell"></div>
 
-    <h2>Город</h2>
-    <div class="detail" id="detail"><p class="muted">Нажмите на город на карте или в списке.</p></div>
+    <h2>City</h2>
+    <div class="detail" id="detail"><p class="muted">Click a city on the map or in the list.</p></div>
 
     <div class="method">
-      <p><b>Как читать цвет.</b> Красный — город горячее окрестностей (или разрыв растёт), синий — прохладнее (или разрыв сокращается). Днём в пустынных и полупустынных городах часто бывает «остров прохлады»: полив, деревья и тень против раскалённой голой земли. Ночью почти везде наоборот: бетон и асфальт отдают накопленное за день тепло.</p>
-      <p><b>Данные.</b> Температура поверхности (LST) Aqua MODIS MYD11A2 v6.1, 1 км, июнь–август, около 13:30 и 01:30. Город — связное «городское ядро» GHSL 2020 (класс 30), окрестности — сельские ячейки GHSL (11–13) в радиусе 50 км с высотой не больше ±100 м от высоты города. Тренд — наклон Сена, значимость — тест Манна–Кендалла.</p>
-      <p><b>Ограничения.</b> LST — температура поверхности, а не воздуха. Остров тепла меняется не только из-за города: распашка, орошение или опустынивание окрестностей (например, у Нукуса и Кызылорды из-за высыхания Арала) тоже сдвигают разницу.</p>
+      <p><b>Reading the colours.</b> Red: the city is hotter than its surroundings (or the gap is growing). Blue: cooler (or the gap is shrinking). By day, desert and semi-desert cities are often <i>cool islands</i>: irrigation, trees and shade versus scorching bare ground. At night it flips almost everywhere, as concrete and asphalt release the heat stored during the day.</p>
+      <p><b>Data.</b> Land surface temperature (LST) from Aqua MODIS MYD11A2 v6.1, 1 km, June–August, ~13:30 and ~01:30 local time. City = the contiguous GHSL 2020 urban centre (class 30) around the city point; surroundings = GHSL rural cells (classes 11–13) within 50 km and within ±100 m of the city’s elevation. Trend = Sen’s slope, significance = Mann–Kendall test.</p>
+      <p><b>Caveats.</b> LST is the temperature of the ground and roofs, not the air. The gap also moves when the surroundings change: ploughing, irrigation or desertification (e.g. around Nukus and Kyzylorda as the Aral Sea dried up).</p>
     </div>
   </aside>
 </div>
@@ -61,22 +61,22 @@
   const { cities, demo, region } = await LST.load();
   LST.demoBanner(demo);
 
-  const COUNTRY_RU = { Kazakhstan: 'Казахстан', Uzbekistan: 'Узбекистан', Kyrgyzstan: 'Кыргызстан', Tajikistan: 'Таджикистан', Turkmenistan: 'Туркменистан' };
-  cities.forEach(c => { c.country = COUNTRY_RU[c.country] || c.country; });
+  const NAMES_EN = { Oskemen: 'Oskemen (Ust-Kamenogorsk)', Oral: 'Oral (Uralsk)', Petropavl: 'Petropavl', Qarshi: 'Qarshi' };
+  cities.forEach(c => { c.label = c.name; c.long = NAMES_EN[c.name] || c.name; });
   let time = 'day', view = 'trend', selected = null;
   const m = () => `suhi_${time}`;
   const VIEWS = {
-    trend: { label: 'Рост', title: 'Изменение острова тепла, °C за 10 лет', color: LST.diverging(0.8, 0.8), ticks: [-0.8, -0.4, 0, 0.4, 0.8],
+    trend: { label: 'Change', title: 'Heat island change, °C per decade', color: LST.diverging(0.8, 0.8), ticks: [-0.8, -0.4, 0, 0.4, 0.8],
              value: d => d.trend[m()].sen, sig: d => d.trend[m()].p < 0.05 },
-    late:  { label: `Сейчас ${LST.LATE[0]}–${String(LST.LATE[1]).slice(2)}`, title: `Город − окрестности, ${LST.LATE.join('–')}, °C`, color: LST.diverging(4, 4), ticks: [-4, -2, 0, 2, 4],
+    late:  { label: `Now ${LST.LATE[0]}–${String(LST.LATE[1]).slice(2)}`, title: `City − surroundings, ${LST.LATE.join('–')}, °C`, color: LST.diverging(4, 4), ticks: [-4, -2, 0, 2, 4],
              value: d => d.period[m()].late, sig: () => true },
-    early: { label: `Тогда ${LST.EARLY[0]}–${String(LST.EARLY[1]).slice(2)}`, title: `Город − окрестности, ${LST.EARLY.join('–')}, °C`, color: LST.diverging(4, 4), ticks: [-4, -2, 0, 2, 4],
+    early: { label: `Then ${LST.EARLY[0]}–${String(LST.EARLY[1]).slice(2)}`, title: `City − surroundings, ${LST.EARLY.join('–')}, °C`, color: LST.diverging(4, 4), ticks: [-4, -2, 0, 2, 4],
              value: d => d.period[m()].early, sig: () => true }
   };
   const V = () => VIEWS[view];
   const r = d3.scaleSqrt().domain([0, 450]).range([3, 21]).clamp(true);
 
-  LST.segmented(document.getElementById('seg-time'), [{ v: 'day', label: 'Днём' }, { v: 'night', label: 'Ночью' }], time, v => { time = v; render(); });
+  LST.segmented(document.getElementById('seg-time'), [{ v: 'day', label: 'Day' }, { v: 'night', label: 'Night' }], time, v => { time = v; render(); });
   LST.segmented(document.getElementById('seg-view'), Object.entries(VIEWS).map(([v, o]) => ({ v, label: o.label })), view, v => { view = v; render(); });
 
   let gDots, gLabels;
@@ -97,7 +97,7 @@
       .on('mousemove', (e, d) => { hl(d); LST.tip.show(tipHtml(d), e); })
       .on('mouseleave', () => { hl(null); LST.tip.hide(); })
       .on('click', (e, d) => select(d));
-    gLabels.selectAll('text').data(list, d => d.id).join('text').attr('class', 'city-label').text(d => d.ru);
+    gLabels.selectAll('text').data(list, d => d.id).join('text').attr('class', 'city-label').text(d => d.label);
     place();
     dumbbell();
     if (selected) { detail(selected); equation(selected); }
@@ -127,25 +127,25 @@
 
   function drawLegend() {
     const v = V(), el = document.getElementById('legend');
-    LST.legendBar(el, v.color, { title: v.title + (time === 'day' ? ' · день' : ' · ночь'), ticks: v.ticks });
-    const left = view === 'trend' ? '← разрыв сокращается' : '← город прохладнее';
-    const right = view === 'trend' ? 'разрыв растёт →' : 'город горячее →';
+    LST.legendBar(el, v.color, { title: v.title + (time === 'day' ? ' · day' : ' · night'), ticks: v.ticks });
+    const left = view === 'trend' ? '← gap shrinking' : '← city cooler';
+    const right = view === 'trend' ? 'gap growing →' : 'city hotter →';
     const sizes = [50, 150, 400];
     el.insertAdjacentHTML('beforeend', `<div class="note"><span>${left}</span><span style="margin-left:auto">${right}</span></div>
       <div class="note" style="align-items:flex-end;gap:14px">
         <svg class="size-legend" width="${sizes.reduce((a, s) => a + 2 * r(s) + 14, 0)}" height="${2 * r(400) + 16}">${(() => {
           let x0 = 0; return sizes.map(s => { const cx = x0 + r(s); x0 += 2 * r(s) + 14;
             return `<circle cx="${cx + 1}" cy="${2 * r(400) - r(s) + 1}" r="${r(s)}"/><text x="${cx + 1}" y="${2 * r(400) + 13}" text-anchor="middle">${s}</text>`; }).join(''); })()}</svg>
-        <span>площадь городского ядра, км²${view === 'trend' ? `<br><span class="sw" style="background:${v.color(0.6)};opacity:.35;outline:2px solid ${v.color(0.6)};outline-offset:-2px"></span>бледный — тренд незначим` : ''}</span>
+        <span>urban core area, km²${view === 'trend' ? `<br><span class="sw" style="background:${v.color(0.6)};opacity:.35;outline:2px solid ${v.color(0.6)};outline-offset:-2px"></span>faded = not significant` : ''}</span>
       </div>`);
   }
 
   function tipHtml(d) {
     const p = d.period[m()], t = d.trend[m()];
-    return `<b>${d.ru}</b> · ${time === 'day' ? 'день' : 'ночь'}<br>
-      <span class="big">${LST.fmt(view === 'trend' ? t.sen : V().value(d), true, view === 'trend' ? 2 : 1)} °C</span> ${view === 'trend' ? 'за 10 лет' : 'город − окрестности'}<br>
-      остров тепла: ${LST.fmt(p.early, true)}° → ${LST.fmt(p.late, true)}°<br>
-      <span class="muted">${t.p < 0.05 ? 'тренд значим' : 'тренд незначим'} (p = ${t.p.toFixed(2)}) · ядро ≈ ${Math.round(d.km2)} км²</span>`;
+    return `<b>${d.long}</b>, ${d.country} · ${time === 'day' ? 'day' : 'night'}<br>
+      <span class="big">${LST.fmt(view === 'trend' ? t.sen : V().value(d), true, view === 'trend' ? 2 : 1)} °C</span> ${view === 'trend' ? 'per decade' : 'city − surroundings'}<br>
+      heat island: ${LST.fmt(p.early, true)}° → ${LST.fmt(p.late, true)}°<br>
+      <span class="muted">${t.p < 0.05 ? 'significant trend' : 'not significant'} (p = ${t.p.toFixed(2)}) · core ≈ ${Math.round(d.km2)} km²</span>`;
   }
 
   /* -------------------------------------------------------------- panel --- */
@@ -157,9 +157,9 @@
     const W = el.clientWidth || 340, rowH = 17, top = 22, H = top + list.length * rowH + 6, L = 118, R = 44;
     const vals = list.flatMap(d => [d.period[mm].early, d.period[mm].late]);
     const x = d3.scaleLinear().domain([Math.min(0, d3.min(vals)), Math.max(0, d3.max(vals))]).nice().range([L, W - R]);
-    document.getElementById('db-title').textContent = `Тогда и сейчас · ${time === 'day' ? 'день' : 'ночь'}`;
+    document.getElementById('db-title').textContent = `Then and now · ${time === 'day' ? 'day' : 'night'}`;
     document.getElementById('db-key').innerHTML = `<span><svg width="10" height="10"><circle cx="5" cy="5" r="4" fill="none" stroke="#c3c2b7" stroke-width="1.5"/></svg> ${LST.EARLY.join('–')}</span>
-      <span><svg width="10" height="10"><circle cx="5" cy="5" r="4.5" fill="#ec6a42"/></svg> ${LST.LATE.join('–')}</span><span class="muted">справа — тренд, °C/10 лет</span>`;
+      <span><svg width="10" height="10"><circle cx="5" cy="5" r="4.5" fill="#ec6a42"/></svg> ${LST.LATE.join('–')}</span><span class="muted">right: trend, °C/decade</span>`;
     const svg = d3.select(el).html('').append('svg').attr('class', 'dumbbell').attr('width', W).attr('height', H);
     const ax = svg.append('g').attr('class', 'ax');
     x.ticks(4).forEach(t => {
@@ -169,7 +169,7 @@
     const row = svg.selectAll('g.row').data(list, d => d.id).join('g').attr('class', d => 'row' + (d === selected ? ' on' : ''))
       .attr('transform', (d, i) => `translate(0,${top + i * rowH})`);
     row.append('rect').attr('class', 'hit').attr('width', W).attr('height', rowH).attr('rx', 4);
-    row.append('text').attr('x', 4).attr('y', rowH / 2).attr('dy', '0.35em').text(d => d.ru);
+    row.append('text').attr('x', 4).attr('y', rowH / 2).attr('dy', '0.35em').text(d => d.label);
     row.append('line').attr('class', 'conn').attr('stroke', d => VIEWS.trend.color(d.trend[mm].sen)).attr('stroke-opacity', .8)
       .attr('x1', d => x(d.period[mm].early)).attr('x2', d => x(d.period[mm].late)).attr('y1', rowH / 2).attr('y2', rowH / 2);
     row.append('circle').attr('cx', d => x(d.period[mm].early)).attr('cy', rowH / 2).attr('r', 4).attr('fill', 'var(--panel)').attr('stroke', '#c3c2b7').attr('stroke-width', 1.5);
@@ -183,10 +183,10 @@
     const mm = time, p = d.period;
     const u = p[`urban_${mm}`].late, ru = p[`rural_${mm}`].late, s = p[`suhi_${mm}`].late;
     document.getElementById('equation').innerHTML = `
-      <div class="term"><div class="k">${d.ru}</div><div class="val">${LST.fmt(u)}°</div></div><div class="op">−</div>
-      <div class="term"><div class="k">окрестности</div><div class="val">${LST.fmt(ru)}°</div></div><div class="op">=</div>
-      <div class="term res"><div class="k">остров тепла</div><div class="val" style="color:${VIEWS.late.color(s)}">${LST.fmt(s, true)}°</div></div>`;
-    document.getElementById('eq-note').textContent = `Средняя температура поверхности в июне–августе ${LST.LATE.join('–')}, ${time === 'day' ? 'около 13:30' : 'около 01:30'}.`;
+      <div class="term"><div class="k">${d.label}</div><div class="val">${LST.fmt(u)}°</div></div><div class="op">−</div>
+      <div class="term"><div class="k">surroundings</div><div class="val">${LST.fmt(ru)}°</div></div><div class="op">=</div>
+      <div class="term res"><div class="k">heat island</div><div class="val" style="color:${VIEWS.late.color(s)}">${LST.fmt(s, true)}°</div></div>`;
+    document.getElementById('eq-note').textContent = `Mean surface temperature, June–August ${LST.LATE.join('–')}, ${time === 'day' ? 'around 13:30' : 'around 01:30'}.`;
   }
 
   function hl(d) {
@@ -200,18 +200,18 @@
   function detail(d) {
     const mm = m(), t = d.trend, p = d.period[mm];
     const el = document.getElementById('detail');
-    el.innerHTML = `<h3>${d.ru}</h3><div class="meta">${d.country} · июнь–август · ${time === 'day' ? 'день, ≈13:30' : 'ночь, ≈01:30'} · ядро ≈ ${Math.round(d.km2)} км²</div>
+    el.innerHTML = `<h3>${d.long}</h3><div class="meta">${d.country} · June–August · ${time === 'day' ? 'day, ≈13:30' : 'night, ≈01:30'} · core ≈ ${Math.round(d.km2)} km²</div>
       <div class="stats">
-        <div class="stat"><div class="k">остров ${LST.EARLY.join('–')}</div><div class="val">${LST.fmt(p.early, true)}°</div></div>
-        <div class="stat"><div class="k">остров ${LST.LATE.join('–')}</div><div class="val">${LST.fmt(p.late, true)}°</div></div>
-        <div class="stat"><div class="k">тренд /10 лет</div><div class="val">${LST.fmt(t[mm].sen, true, 2)}°</div></div>
+        <div class="stat"><div class="k">island ${LST.EARLY.join('–')}</div><div class="val">${LST.fmt(p.early, true)}°</div></div>
+        <div class="stat"><div class="k">island ${LST.LATE.join('–')}</div><div class="val">${LST.fmt(p.late, true)}°</div></div>
+        <div class="stat"><div class="k">trend / decade</div><div class="val">${LST.fmt(t[mm].sen, true, 2)}°</div></div>
       </div>
-      <div class="key"><span><i style="background:var(--urban)"></i>город ${LST.fmt(t['urban_' + time].sen, true, 2)}°/10 лет</span><span><i style="background:var(--rural)"></i>окрестности ${LST.fmt(t['rural_' + time].sen, true, 2)}°/10 лет</span></div>
+      <div class="key"><span><i style="background:var(--urban)"></i>city ${LST.fmt(t['urban_' + time].sen, true, 2)}°/decade</span><span><i style="background:var(--rural)"></i>surroundings ${LST.fmt(t['rural_' + time].sen, true, 2)}°/decade</span></div>
       <div id="chart"></div>
-      <p class="muted" style="margin:6px 0 0">Заливка между линиями — остров тепла. ${t[mm].p < 0.05 ? 'Изменение статистически значимо' : 'Изменение статистически незначимо'} (Манн–Кендалл, p = ${t[mm].p.toFixed(3)}).</p>`;
+      <p class="muted" style="margin:6px 0 0">Shading between the lines is the heat island. ${t[mm].p < 0.05 ? 'The change is statistically significant' : 'The change is not statistically significant'} (Mann–Kendall, p = ${t[mm].p.toFixed(3)}).</p>`;
     LST.lineChart(document.getElementById('chart'), [
-      { name: 'Город', color: '#ec6a42', values: d.series['urban_' + time] },
-      { name: 'Окрестности', color: '#6da7ec', values: d.series['rural_' + time] }
+      { name: 'City', color: '#ec6a42', values: d.series['urban_' + time] },
+      { name: 'Surroundings', color: '#6da7ec', values: d.series['rural_' + time] }
     ], { unit: '°', band: true, directLabels: true });
   }
 

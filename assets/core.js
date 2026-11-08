@@ -2,18 +2,18 @@
 (function () {
   'use strict';
 
-  const BASELINE = [2003, 2012];   // аномалии считаются относительно этого периода
-  const EARLY = [2003, 2007];      // «тогда» для острова тепла
-  const LATE = [2021, 2025];       // «сейчас»
-  const MIN_PX_SHARE = 0.5;        // год отбрасывается, если ясных пикселей < 50 % медианы
+  const BASELINE = [2003, 2012];   // baseline period for anomalies
+  const EARLY = [2003, 2007];      // "then" period for the heat island
+  const LATE = [2021, 2025];       // "now" period
+  const MIN_PX_SHARE = 0.5;        // drop a year if clear pixels < 50 % of the city's median
 
   const METRICS = {
-    urban_day:   { label: 'Город · день',      short: 'город, день' },
-    urban_night: { label: 'Город · ночь',      short: 'город, ночь' },
-    rural_day:   { label: 'Пригород · день',   short: 'пригород, день' },
-    rural_night: { label: 'Пригород · ночь',   short: 'пригород, ночь' },
-    suhi_day:    { label: 'Остров тепла · день', short: 'SUHI, день' },
-    suhi_night:  { label: 'Остров тепла · ночь', short: 'SUHI, ночь' }
+    urban_day:   { label: 'City · day' },
+    urban_night: { label: 'City · night' },
+    rural_day:   { label: 'Surroundings · day' },
+    rural_night: { label: 'Surroundings · night' },
+    suhi_day:    { label: 'Heat island · day' },
+    suhi_night:  { label: 'Heat island · night' }
   };
 
   /* ------------------------------------------------------------ data --- */
@@ -139,13 +139,13 @@
   /* --------------------------------------------------------- base map --- */
   // Central Asia in a conic equal-area projection; countries from Natural Earth 1:50m.
   const PLACE_LABELS = [
-    { t: 'КАЗАХСТАН', p: [67.5, 48.3], cls: 'ca' }, { t: 'УЗБЕКИСТАН', p: [63.6, 41.4], cls: 'ca' },
-    { t: 'ТУРКМЕНИСТАН', p: [58.8, 39.4], cls: 'ca' }, { t: 'КЫРГЫЗСТАН', p: [75.2, 41.6], cls: 'ca' },
-    { t: 'ТАДЖИКИСТАН', p: [71.4, 38.75], cls: 'ca' },
-    { t: 'РОССИЯ', p: [66, 56.6], cls: 'nb' }, { t: 'КИТАЙ', p: [81.5, 41.3], cls: 'nb' },
-    { t: 'АФГАНИСТАН', p: [66, 34.6], cls: 'nb' }, { t: 'ИРАН', p: [55.5, 34], cls: 'nb' },
-    { t: 'МОНГОЛИЯ', p: [92, 47.5], cls: 'nb' },
-    { t: 'Каспийское\nморе', p: [50.6, 41.6], cls: 'sea' }
+    { t: 'KAZAKHSTAN', p: [67.5, 48.3], cls: 'ca' }, { t: 'UZBEKISTAN', p: [63.6, 41.4], cls: 'ca' },
+    { t: 'TURKMENISTAN', p: [58.8, 39.4], cls: 'ca' }, { t: 'KYRGYZSTAN', p: [75.2, 41.6], cls: 'ca' },
+    { t: 'TAJIKISTAN', p: [71.4, 38.75], cls: 'ca' },
+    { t: 'RUSSIA', p: [66, 56.6], cls: 'nb' }, { t: 'CHINA', p: [81.5, 41.3], cls: 'nb' },
+    { t: 'AFGHANISTAN', p: [66, 34.6], cls: 'nb' }, { t: 'IRAN', p: [55.5, 34], cls: 'nb' },
+    { t: 'MONGOLIA', p: [92, 47.5], cls: 'nb' },
+    { t: 'Caspian\nSea', p: [50.6, 41.6], cls: 'sea' }
   ];
 
   function baseMap(container, region, { onZoom } = {}) {
@@ -228,7 +228,7 @@
     const W = el.clientWidth || 320, H = opts.height || 190;
     const m = { t: 12, r: 12, b: 24, l: 36 };
     const all = series.flatMap(s => s.values);
-    if (!all.length) { el.innerHTML = '<p class="muted">Нет данных</p>'; return; }
+    if (!all.length) { el.innerHTML = '<p class="muted">No data</p>'; return; }
     const x = d3.scaleLinear().domain(d3.extent(all, d => d.year)).range([m.l, W - m.r]);
     let ext = d3.extent(all, d => d.v);
     if (opts.zero) ext = [Math.min(0, ext[0]), Math.max(0, ext[1])];
@@ -291,7 +291,7 @@
     if (!isDemo) return;
     const b = document.createElement('div');
     b.className = 'demo-banner';
-    b.innerHTML = '<b>ДЕМО-ДАННЫЕ.</b> Значения синтетические, чтобы проверить вёрстку. Запустите <code>gee/lst_cities.js</code> в Earth Engine и положите CSV в <code>data/lst_summer_cities.csv</code> — баннер исчезнет.';
+    b.innerHTML = '<b>DEMO DATA.</b> These values are synthetic, for layout only. Run <code>gee/lst_cities.js</code> in Earth Engine and save the CSV as <code>data/lst_summer_cities.csv</code> to replace them.';
     (document.querySelector('.panel') || document.body).prepend(b);
   }
 
